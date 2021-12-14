@@ -9,7 +9,7 @@ metadata:
   # https://github.com/kubernetes/autoscaler/pull/3968
   name: gitpod
   # Template, please change
-  region: us-west-2
+  region: cn-northwest-1
   version: "1.21"
 
 iam:
@@ -33,9 +33,9 @@ iam:
         autoScaler: true
 
 availabilityZones:
-  - us-west-2a
-  - us-west-2b
-  - us-west-2c
+  - cn-northwest-1a
+  - cn-northwest-1b
+  - cn-northwest-1c
 
 # By default we create a dedicated VPC for the cluster
 # You can use an existing VPC by supplying private and/or public subnets. Please check
@@ -100,20 +100,16 @@ managedNodeGroups:
     # to ensure that nodes are able to join the cluster https://eksctl.io/usage/custom-ami-support/
     overrideBootstrapCommand: |
       #!/bin/bash
-
       export CLUSTERNAME=gitpod
       export NODEGROUP=workspaces
-
       declare -a LABELS=(
         eks.amazonaws.com/nodegroup="${NODEGROUP}"
         gitpod.io/workload_workspace_services=true
         gitpod.io/workload_workspace_regular=true
         gitpod.io/workload_workspace_headless=true
       )
-
       export KUBELET_EXTRA_ARGS="$(printf -- "--max-pods=110 --node-labels=%s" $(IFS=$','; echo "${LABELS[*]}"))"
       /etc/eks/bootstrap.sh ${CLUSTERNAME}
-
     spot: false
     # https://eksctl.io/usage/instance-selector/
     #instanceSelector:
@@ -133,7 +129,7 @@ managedNodeGroups:
     # https://aws.amazon.com/es/ebs/pricing/
     volumeSize: 100
     volumeType: gp3
-    volumeIOPS: 6000
+    volumeIOPS: 3000
     volumeThroughput: 500
     ebsOptimized: true
     # Use private subnets for nodes
@@ -152,19 +148,15 @@ managedNodeGroups:
     # to ensure that nodes are able to join the cluster https://eksctl.io/usage/custom-ami-support/
     overrideBootstrapCommand: |
       #!/bin/bash
-
       export CLUSTERNAME=gitpod
       export NODEGROUP=services
-
       declare -a LABELS=(
         eks.amazonaws.com/nodegroup="${NODEGROUP}"
         gitpod.io/workload_meta=true
         gitpod.io/workload_ide=true
       )
-
       export KUBELET_EXTRA_ARGS="$(printf -- "--max-pods=110 --node-labels=%s" $(IFS=$','; echo "${LABELS[*]}"))"
       /etc/eks/bootstrap.sh ${CLUSTERNAME}
-
     spot: false
     # https://eksctl.io/usage/instance-selector/
     #instanceSelector:
