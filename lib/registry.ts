@@ -26,7 +26,7 @@ export class Registry extends cdk.Stack {
             });
         } else {
             registryBucket = Bucket.fromBucketAttributes(this, 'RegistryBucket', {
-                bucketArn: `arn:aws:s3:::${props.bucketName}`,
+                bucketArn: `arn:aws-cn:s3:::${props.bucketName}`,
             });
         }
 

@@ -85,11 +85,11 @@ managedNodeGroups:
       k8s.io/cluster-autoscaler/gitpod: "owned"
     iam:
       attachPolicyARNs: &attachPolicyARNs
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws-cn:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws-cn:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws-cn:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws-cn:iam::aws:policy/ElasticLoadBalancingFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonSSMManagedInstanceCore
       withAddonPolicies: &withAddonPolicies
         albIngress: true
         autoScaler: true

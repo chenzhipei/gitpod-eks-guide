@@ -114,7 +114,7 @@ function install() {
     else
         echo "Creating Role for EKS access"
         # Create IAM role and mapping to Kubernetes user and groups.
-        POLICY=$(echo -n '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":"arn:aws:iam::'; echo -n "$ACCOUNT_ID"; echo -n ':root"},"Action":"sts:AssumeRole","Condition":{}}]}')
+        POLICY=$(echo -n '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":"arn:aws-cn:iam::'; echo -n "$ACCOUNT_ID"; echo -n ':root"},"Action":"sts:AssumeRole","Condition":{}}]}')
         KUBECTL_ROLE_ARN=$(${AWS_CMD} iam create-role \
             --role-name "${CLUSTER_NAME}-region-${AWS_REGION}-role-eksadmin" \
             --description "Kubernetes role (for AWS IAM Authenticator for Kubernetes)." \

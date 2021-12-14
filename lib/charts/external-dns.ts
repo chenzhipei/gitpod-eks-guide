@@ -26,7 +26,7 @@ export class ExternalDNS extends cdk.Construct {
             new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
                 actions: ['route53:ChangeResourceRecordSets'],
-                resources: ['arn:aws:route53:::hostedzone/*'],
+                resources: ['arn:aws-cn:route53:::hostedzone/*'],
             }),
         );
         serviceAccount.addToPrincipalPolicy(
