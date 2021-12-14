@@ -9,7 +9,7 @@ metadata:
   # https://github.com/kubernetes/autoscaler/pull/3968
   name: gitpod
   # Template, please change
-  region: us-west-2
+  region: cn-northwest-1
   version: "1.21"
 
 iam:
@@ -33,9 +33,9 @@ iam:
         autoScaler: true
 
 availabilityZones:
-  - us-west-2a
-  - us-west-2b
-  - us-west-2c
+  - cn-northwest-1a
+  - cn-northwest-1b
+  - cn-northwest-1c
 
 # By default we create a dedicated VPC for the cluster
 # You can use an existing VPC by supplying private and/or public subnets. Please check
@@ -77,7 +77,8 @@ managedNodeGroups:
     # Use private subnets for nodes
     # https://eksctl.io/usage/vpc-networking/#use-private-subnets-for-initial-nodegroup
     privateNetworking: true
-    ami: ami-009935ddbb32a7f3c
+    # ami: ami-009935ddbb32a7f3c
+    ami: ami-01ecefd03fc7c65bd
 
     tags:
       # EC2 tags required for cluster-autoscaler auto-discovery
@@ -85,11 +86,11 @@ managedNodeGroups:
       k8s.io/cluster-autoscaler/gitpod: "owned"
     iam:
       attachPolicyARNs: &attachPolicyARNs
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws-cn:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws-cn:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws-cn:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws-cn:iam::aws:policy/ElasticLoadBalancingFullAccess
+        - arn:aws-cn:iam::aws:policy/AmazonSSMManagedInstanceCore
       withAddonPolicies: &withAddonPolicies
         albIngress: true
         autoScaler: true
@@ -100,27 +101,23 @@ managedNodeGroups:
     # to ensure that nodes are able to join the cluster https://eksctl.io/usage/custom-ami-support/
     overrideBootstrapCommand: |
       #!/bin/bash
-
       export CLUSTERNAME=gitpod
       export NODEGROUP=workspaces
-
       declare -a LABELS=(
         eks.amazonaws.com/nodegroup="${NODEGROUP}"
         gitpod.io/workload_workspace_services=true
         gitpod.io/workload_workspace_regular=true
         gitpod.io/workload_workspace_headless=true
       )
-
       export KUBELET_EXTRA_ARGS="$(printf -- "--max-pods=110 --node-labels=%s" $(IFS=$','; echo "${LABELS[*]}"))"
       /etc/eks/bootstrap.sh ${CLUSTERNAME}
-
     spot: false
     # https://eksctl.io/usage/instance-selector/
     #instanceSelector:
     #  vCPUs: 8
     #  memory: 64Gib
     # or use a custom list
-    instanceTypes: ["m6i.xlarge", "m6i.2xlarge"]
+    instanceTypes: ["m5a.xlarge", "m5a.xlarge"]
 
   - name: services
     desiredCapacity: 1
@@ -133,13 +130,14 @@ managedNodeGroups:
     # https://aws.amazon.com/es/ebs/pricing/
     volumeSize: 100
     volumeType: gp3
-    volumeIOPS: 6000
+    volumeIOPS: 3000
     volumeThroughput: 500
     ebsOptimized: true
     # Use private subnets for nodes
     # https://eksctl.io/usage/vpc-networking/#use-private-subnets-for-initial-nodegroup
     privateNetworking: true
-    ami: ami-009935ddbb32a7f3c
+    # ami: ami-009935ddbb32a7f3c
+    ami: ami-01ecefd03fc7c65bd
 
     tags:
       # EC2 tags required for cluster-autoscaler auto-discovery
@@ -152,23 +150,19 @@ managedNodeGroups:
     # to ensure that nodes are able to join the cluster https://eksctl.io/usage/custom-ami-support/
     overrideBootstrapCommand: |
       #!/bin/bash
-
       export CLUSTERNAME=gitpod
       export NODEGROUP=services
-
       declare -a LABELS=(
         eks.amazonaws.com/nodegroup="${NODEGROUP}"
         gitpod.io/workload_meta=true
         gitpod.io/workload_ide=true
       )
-
       export KUBELET_EXTRA_ARGS="$(printf -- "--max-pods=110 --node-labels=%s" $(IFS=$','; echo "${LABELS[*]}"))"
       /etc/eks/bootstrap.sh ${CLUSTERNAME}
-
     spot: false
     # https://eksctl.io/usage/instance-selector/
     #instanceSelector:
     #  vCPUs: 4
     #  memory: 16Gib
     # or use a custom list
-    instanceTypes: ["m6i.xlarge", "m6i.2xlarge"]
+    instanceTypes: ["m5a.xlarge", "m5a.xlarge"]

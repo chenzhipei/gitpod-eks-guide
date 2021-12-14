@@ -1,0 +1,6 @@
+{
+  "Setup": {
+    "ClusterName": "gitpod",
+    "OpenIdConnectProviderArn": "arn:aws-cn:iam::318804062415:oidc-provider/oidc.eks.cn-northwest-1.amazonaws.com/id/D563E80E60861A769E8C85FA12DFA49E"
+  }
+}

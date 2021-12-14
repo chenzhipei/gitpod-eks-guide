@@ -1,9 +1,9 @@
 
 PACKER_VARIABLES := binary_bucket_name binary_bucket_region eks_version eks_build_date root_volume_size data_volume_size hardening_flag http_proxy https_proxy no_proxy
-VPC_ID := vpc-0e8cf1ce122b1b059
-SUBNET_ID := subnet-0eddf1d7d0f9f9772
-AWS_REGION := us-west-2
-PACKER_FILE :=
+VPC_ID := vpc-0bc352f18cc50e002
+SUBNET_ID := subnet-01c3e521a3aaa753b
+AWS_REGION := cn-northwest-1
+PACKER_FILE := amazon-eks-node-ubuntu2110.json
 
 EKS_BUILD_DATE := 2020-11-02
 EKS_120_VERSION := 1.20.4

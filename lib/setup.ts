@@ -20,7 +20,7 @@ export class SetupStack extends cdk.Stack {
 
         // Extract the ID of the EKS cluster from the identityoidcissuer URL
         const clusterID = path.basename(props.identityoidcissuer);
-        const oidcProviderArn = `arn:aws:iam::${process.env.ACCOUNT_ID}:oidc-provider/oidc.eks.${process.env.AWS_REGION}.amazonaws.com/id/${clusterID}`;
+        const oidcProviderArn = `arn:aws-cn:iam::${process.env.ACCOUNT_ID}:oidc-provider/oidc.eks.${process.env.AWS_REGION}.amazonaws.com/id/${clusterID}`;
         const openIdConnectProvider = iam.OpenIdConnectProvider.fromOpenIdConnectProviderArn(this, "OpenIdConnectProvider", oidcProviderArn);
 
         new cdk.CfnOutput(this, "ClusterName", {
