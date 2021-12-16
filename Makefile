@@ -17,8 +17,13 @@ else
 	IMAGE_PULL_SECRET=
 endif
 
-build: ## Build docker image containing the required tools for the installation
-	@docker build --squash --quiet . -t ${IMG}
+# build: ## Build docker image containing the required tools for the installation
+# 	@docker build --squash . -t ${IMG}
+# 	@mkdir -p ${PWD}/logs
+
+# M1 build x86 image
+build: 
+	@docker buildx build --squash . -t ${IMG} --platform=linux/amd64
 	@mkdir -p ${PWD}/logs
 
 DOCKER_RUN_CMD = docker run -it \
