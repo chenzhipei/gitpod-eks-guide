@@ -71,13 +71,14 @@ managedNodeGroups:
     # https://aws.amazon.com/es/ebs/pricing/
     volumeSize: 300
     volumeType: gp3
-    volumeIOPS: 6000
+    volumeIOPS: 3000
     volumeThroughput: 500
     ebsOptimized: true
     # Use private subnets for nodes
     # https://eksctl.io/usage/vpc-networking/#use-private-subnets-for-initial-nodegroup
     privateNetworking: true
-    ami: ami-009935ddbb32a7f3c
+    # ami: ami-009935ddbb32a7f3c
+    ami: ami-01ecefd03fc7c65bd
 
     tags:
       # EC2 tags required for cluster-autoscaler auto-discovery
@@ -116,7 +117,7 @@ managedNodeGroups:
     #  vCPUs: 8
     #  memory: 64Gib
     # or use a custom list
-    instanceTypes: ["m6i.xlarge", "m6i.2xlarge"]
+    instanceTypes: ["m5a.xlarge", "m5a.xlarge"]
 
   - name: services
     desiredCapacity: 1
@@ -135,7 +136,8 @@ managedNodeGroups:
     # Use private subnets for nodes
     # https://eksctl.io/usage/vpc-networking/#use-private-subnets-for-initial-nodegroup
     privateNetworking: true
-    ami: ami-009935ddbb32a7f3c
+    # ami: ami-009935ddbb32a7f3c
+    ami: ami-01ecefd03fc7c65bd
 
     tags:
       # EC2 tags required for cluster-autoscaler auto-discovery
@@ -163,4 +165,4 @@ managedNodeGroups:
     #  vCPUs: 4
     #  memory: 16Gib
     # or use a custom list
-    instanceTypes: ["m6i.xlarge", "m6i.2xlarge"]
+    instanceTypes: ["m5a.xlarge", "m5a.xlarge"]

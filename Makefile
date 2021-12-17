@@ -27,12 +27,12 @@ build:
 	@mkdir -p ${PWD}/logs
 
 DOCKER_RUN_CMD = docker run -it \
-	--pull always \
 	--env-file ${PWD}/.env \
 	--env NODE_ENV=production \
 	--volume ${PWD}/.kubeconfig:/gitpod/.kubeconfig \
 	$(IMAGE_PULL_SECRET) \
 	--volume ${PWD}/eks-cluster.yaml:/gitpod/eks-cluster.yaml \
+	--volume ${PWD}/cdk.out:/gitpod/cdk.out \
 	--volume ${PWD}/logs:/root/.npm/_logs \
 	--volume ${PWD}/gitpod-config.yaml:/gitpod/gitpod-config.yaml \
 	--volume ${PWD}/cdk-outputs.json:/gitpod/cdk-outputs.json \
