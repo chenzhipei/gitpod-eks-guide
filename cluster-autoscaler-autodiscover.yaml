@@ -155,17 +155,21 @@ spec:
               memory: 600Mi
           command:
             - ./cluster-autoscaler
-            - --v=4
+            - --v=2
             - --stderrthreshold=info
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
+            - --scale-down-utilization-threshold=0.2
             - --expander=least-waste
-            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/<YOUR CLUSTER NAME>
+            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/gitpod
+            - --balance-similar-node-groups=true
+            - --cordon-node-before-terminating=true
+            - --skip-nodes-with-system-pods=false
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt #/etc/ssl/certs/ca-bundle.crt for Amazon Linux Worker Nodes
               readOnly: true
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
       volumes:
         - name: ssl-certs
           hostPath:

@@ -28,6 +28,12 @@ export class ClusterAutoscaler extends cdk.Construct {
                     name: CLUSTER_AUTOSCALER,
                 },
                 replicaCount: 1,
+                // image:{
+                //     repository: '318804062415.dkr.ecr.cn-northwest-1.amazonaws.com.cn/gcr/google_containers/autoscaling/cluster-autoscaler:v1.21.2'
+                // },
+                // image:{
+                //     repository: 'steedos/cluster-autoscaler:v1.21.1'
+                // },
                 extraArgs: {
                     'stderrthreshold': 'info',
                     'v': 2,

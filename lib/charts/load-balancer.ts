@@ -20,6 +20,9 @@ export class AWSLoadBalancerController extends cdk.Construct {
                 replicaCount: 1,
                 hostNetwork: true,
                 clusterName: cluster.clusterName,
+                image:{
+                    repository: '918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn/amazon/aws-load-balancer-controller'
+                },
                 serviceAccount: {
                     create: false,
                     name: AWS_LOAD_BALANCER_CONTROLLER,

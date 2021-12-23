@@ -93,7 +93,7 @@ function install() {
     else
         eksctl utils write-kubeconfig --cluster "${CLUSTER_NAME}"
     fi
-
+    echo "install EKS 1-------------"
     # Disable default AWS CNI provider.
     # The reason for this change is related to the number of containers we can have in ec2 instances
     # https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt
@@ -102,6 +102,7 @@ function install() {
     # Install Calico.
     kubectl apply -f https://docs.projectcalico.org/manifests/calico-vxlan.yaml
 
+    echo "install EKS 2-------------"
     # Create secret with container registry credentials
     if [ -n "${IMAGE_PULL_SECRET_FILE}" ] && [ -f "${IMAGE_PULL_SECRET_FILE}" ]; then
         kubectl create secret generic gitpod-image-pull-secret \
@@ -157,6 +158,7 @@ function install() {
         --region "${AWS_REGION}" > /dev/null 2>&1
 
     # deploy CDK stacks
+    echo "install EKS 3-------------"
     cdk deploy \
         --context clusterName="${CLUSTER_NAME}" \
         --context region="${AWS_REGION}" \
@@ -168,6 +170,7 @@ function install() {
         --all
 
     # TLS termination is done in the ALB.
+    echo "install EKS 4-------------"
     cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -218,16 +221,19 @@ EOF
     yq e -i ".containerRegistry.s3storage.certificate.name = \"${SECRET_STORAGE}\"" "${CONFIG_FILE}"
     yq e -i ".workspace.runtime.fsShiftMethod = \"shiftfs\"" "${CONFIG_FILE}"
 
-    gitpod-installer \
-        render \
-        --config="${CONFIG_FILE}" > gitpod.yaml
+    # gitpod-installer \
+    #     render \
+    #     --config="${CONFIG_FILE}" > gitpod.yaml
 
+    echo "install EKS 5-------------"
     kubectl apply -f gitpod.yaml
 
+    echo "install EKS 6-------------"
     # remove shiftfs-module-loader container.
     # TODO: remove once the container is removed from the installer
     kubectl patch daemonset ws-daemon --type json -p='[{"op": "remove",  "path": "/spec/template/spec/initContainers/3"}]'
     # Patch proxy service to remove use of cloud load balancer. In EKS we use ALB.
+    echo "install EKS 7-------------"
     kubectl patch service   proxy     --type merge --patch \
 "$(cat <<EOF
 spec:

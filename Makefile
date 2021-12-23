@@ -17,14 +17,14 @@ else
 	IMAGE_PULL_SECRET=
 endif
 
-# build: ## Build docker image containing the required tools for the installation
-# 	@docker build --squash . -t ${IMG}
-# 	@mkdir -p ${PWD}/logs
+build: ## Build docker image containing the required tools for the installation
+	@docker build --squash . -t ${IMG}
+	@mkdir -p ${PWD}/logs
 
 # M1 build x86 image
-build: 
-	@docker buildx build --squash . -t ${IMG} --platform=linux/amd64
-	@mkdir -p ${PWD}/logs
+# build: 
+# 	@docker buildx build --squash . -t ${IMG} --platform=linux/amd64
+# 	@mkdir -p ${PWD}/logs
 
 DOCKER_RUN_CMD = docker run -it \
 	--env-file ${PWD}/.env \
@@ -32,12 +32,16 @@ DOCKER_RUN_CMD = docker run -it \
 	--volume ${PWD}/.kubeconfig:/gitpod/.kubeconfig \
 	$(IMAGE_PULL_SECRET) \
 	--volume ${PWD}/eks-cluster.yaml:/gitpod/eks-cluster.yaml \
+	--volume ${PWD}/setup.sh:/gitpod/setup.sh \
 	--volume ${PWD}/cdk.out:/gitpod/cdk.out \
+	--volume ${PWD}/lib:/gitpod/lib \
+	--volume ${PWD}/gitpod.yaml:/gitpod/gitpod.yaml \
 	--volume ${PWD}/logs:/root/.npm/_logs \
 	--volume ${PWD}/gitpod-config.yaml:/gitpod/gitpod-config.yaml \
 	--volume ${PWD}/cdk-outputs.json:/gitpod/cdk-outputs.json \
 	--volume ${HOME}/.aws:/root/.aws \
 	${IMG} $(1)
+
 
 install: ## Install Gitpod
 	@echo "Starting install process..."

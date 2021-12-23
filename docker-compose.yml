@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  expressvpn:
+    container_name: expressvpn
+    image: polkaned/expressvpn
+    environment:
+      - ACTIVATION_CODE=EXJ5Y0SGWYSDVDUP1IJXJVM
+      - SERVER=usla5
+      - PREFERRED_PROTOCOL=
+      - LIGHTWAY_CIPHER=
+    cap_add:
+      - NET_ADMIN
+    devices: 
+      - /dev/net/tun
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    privileged: true
+    restart: unless-stopped
+    # ports:
+      # ports of other containers that use the vpn (to access them locally)
+
+  gitpod-eks-guide:
+    image: ghcr.io/gitpod-io/gitpod-eks-guide:latest
+    container_name: gitpod-eks-guide
+    network_mode: service:expressvpn
+    env_file: .env
+    command: --install
+    volumes:
+      - "./.kubeconfig:/gitpod/.kubeconfig"
+      - "./eks-cluster.yaml:/gitpod/eks-cluster.yaml"
+      - "./setup.sh:/gitpod/setup.sh"
+      - "./cdk.out:/gitpod/cdk.outv"
+      - "./lib:/gitpod/lib"
+      - "./gitpod.yaml:/gitpod/gitpod.yaml"
+      - "./logs:/root/.npm/_logs"
+      - "./gitpod-config.yaml:/gitpod/gitpod-config.yaml"
+      - "./cdk-outputs.json:/gitpod/cdk-outputs.json"
+      - "/Users/chenzhipei/.aws:/root/.aws"
+    depends_on:
+      - expressvpn
