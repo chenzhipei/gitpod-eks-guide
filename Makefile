@@ -18,7 +18,7 @@ else
 endif
 
 build: ## Build docker image containing the required tools for the installation
-	@docker build --squash . -t ${IMG}
+	@docker build --quiet . -t ${IMG}
 	@mkdir -p ${PWD}/logs
 
 DOCKER_RUN_CMD = docker run -it \
